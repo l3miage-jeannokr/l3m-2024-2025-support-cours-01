@@ -4,7 +4,7 @@ export type DataCollege = [
     rentree_scolaire: number,
     denomination_principale: string,
     patronyme: string,
-    secteur: string, // à discuter
+    secteur: "PUBLIC" | "PRIVE",
     rep: boolean,
     rep_plus: boolean,
     nombre_eleves_total: number,
