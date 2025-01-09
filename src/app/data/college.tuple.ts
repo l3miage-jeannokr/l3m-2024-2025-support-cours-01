@@ -10,3 +10,17 @@ export type DataCollege = [
     nombre_eleves_total: number,
     code_postal: string // ou number ?
 ]
+
+export function processStringToDataCollege(str: string): DataCollege {
+    const L = str.split(";");
+    return [
+        parseInt(L[0]),
+        L[1],
+        L[2],
+        L[3] === "PUBLIC" ? "PUBLIC" : "PRIVE",
+        L[4] === "1",
+        L[5] === "1",
+        parseInt(L[6]),
+        L[6]
+    ]
+}
