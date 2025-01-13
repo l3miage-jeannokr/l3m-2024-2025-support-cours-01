@@ -1,0 +1,27 @@
+Mes 10 collèges sont :
+
+<table>
+    <thead>
+        <th>Nom</th>
+        <th>Nombre d'élèves</th>
+    </thead>
+    <tbody>
+        @for(c of colleges(); track c.denomination_principale) {
+            <tr>
+                <td>
+                    {{ c.denomination_principale }}
+                </td>
+                <td>
+                    {{ c.nombre_eleves_total }}
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button (click)="previousPage()"
+        [disabled]="currentPage() === 0"
+>Précédents
+</button>
+Page courante {{ currentPage() }}
+<button (click)="nextPage()">Suivants</button>

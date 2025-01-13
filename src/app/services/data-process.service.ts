@@ -1,19 +1,23 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, WritableSignal } from '@angular/core';
 import rawData from '../data/data-colleges.csv';
 import { processStringToDataCollege } from '../data/college.tuple';
-import { processCollegeFromTuple } from '../data/college.interface';
+import { College, processCollegeFromTuple } from '../data/college.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataProcessService {
+  private readonly _colleges = signal<readonly College[]>([]);
+  public readonly colleges = this._colleges.asReadonly();
 
   constructor() {
     // Process raw data into a usable format
     // console.log(rawData);
     const lines = rawData.split("\n");
     const Ldata = lines.map(processStringToDataCollege)
-    const collèges = Ldata.map(processCollegeFromTuple);
+    this._colleges.set(
+      Ldata.map(processCollegeFromTuple)
+    );
 
     const LC = rawData.split("\n")
                       .map( processStringToDataCollege )
