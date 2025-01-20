@@ -17,12 +17,14 @@ import { FctFiltreEta, FiltreEtablissementComponent } from './components/filtre-
 export class AppComponent {
   private readonly dataProcessSrv = inject(DataProcessService);
 
-  protected filtreCourant = signal<FctFiltreEta>( c => true )
+  protected filtreCourant = signal<FctFiltreEta>(c => true)
+  
   protected readonly colleges = computed(
     () => this.dataProcessSrv.colleges().filter(this.filtreCourant())
   )
   
   protected nbParPage = signal<number>(5);
+  
   protected page = signal<number>(0);
 
 }
