@@ -1,42 +1,28 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { DataProcessService } from './services/data-process.service';
 import { College } from './data/college.interface';
-
+import { TableEtablissementsComponent } from "./components/table-etablissements/table-etablissements.component";
+import { FormsModule } from "@angular/forms"
+import { FctFiltreEta, FiltreEtablissementComponent } from './components/filtre-etablissement/filtre-etablissement.component';
 @Component({
     selector: 'app-root',
-    imports: [],
+    imports: [
+      TableEtablissementsComponent,
+      FiltreEtablissementComponent,
+      FormsModule
+    ],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'
 })
 export class AppComponent {
   private readonly dataProcessSrv = inject(DataProcessService);
 
-  // Système de pagination
-  private readonly _currentPage = signal(0);
-  protected readonly currentPage = this._currentPage.asReadonly();
+  protected filtreCourant = signal<FctFiltreEta>( c => true )
+  protected readonly colleges = computed(
+    () => this.dataProcessSrv.colleges().filter(this.filtreCourant())
+  )
   
-  private readonly _nbElementsPerPage = signal(10);
-  protected readonly nbPages = computed(
-    () => Math.ceil( this.colleges().length / this._nbElementsPerPage() )
-  )
+  protected nbParPage = signal<number>(5);
+  protected page = signal<number>(0);
 
-  // Dériver un signal des 10 premiers établissements
-  protected readonly colleges = computed<readonly College[]>(
-    () => {
-      const start = this._currentPage() * this._nbElementsPerPage();
-      return this.dataProcessSrv.colleges().slice(start, start + this._nbElementsPerPage())
-    }
-  )
-
-  protected previousPage() {
-    this._currentPage.set(
-      this._currentPage() - 1
-    )
-  }
-
-  protected nextPage() {
-    this._currentPage.set(
-      this._currentPage() + 1
-    )
-  }
 }
